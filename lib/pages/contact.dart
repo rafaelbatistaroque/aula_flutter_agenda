@@ -18,6 +18,8 @@ class _ContactPageState extends State<ContactPage> {
   final _emailCrtl = TextEditingController();
   final _phoneCrtl = TextEditingController();
 
+  final _focusName = FocusNode();
+
   bool _userEdited = false;
   Contact _editContact;
 
@@ -40,7 +42,7 @@ class _ContactPageState extends State<ContactPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),
-      floatingActionButton: _buildBotton(),
+      floatingActionButton: _buildButtonSave(),
     );
   }
 
@@ -51,6 +53,7 @@ class _ContactPageState extends State<ContactPage> {
       centerTitle: true
     );
   }
+
   Widget _buildBody(){
     return SingleChildScrollView(
       padding: EdgeInsets.all(10.0),
@@ -74,6 +77,7 @@ class _ContactPageState extends State<ContactPage> {
           TextField(
             decoration: InputDecoration(labelText: "Nome"),
             controller: _nameCrtl,
+            focusNode: _focusName,
             onChanged: (text){
               _userEdited = true;
               setState(() {
@@ -87,7 +91,7 @@ class _ContactPageState extends State<ContactPage> {
             keyboardType: TextInputType.emailAddress,
             onChanged: (text){
               _userEdited = true;
-                _editContact.email = text;
+              _editContact.email = text;
             },
           ),
           TextField(
@@ -95,18 +99,24 @@ class _ContactPageState extends State<ContactPage> {
             controller: _phoneCrtl,
             onChanged: (text){
               _userEdited = true;
-                _editContact.phone = text;
+              _editContact.phone = text;
             },
           )
         ],
       ),
     );
   }
-  Widget _buildBotton(){
+
+  Widget _buildButtonSave(){
     return FloatingActionButton(
       child: Icon(Icons.save),
       backgroundColor: Colors.red,
-      onPressed: (){},
+      onPressed: (){
+        if(_editContact.name != null && _editContact.name.isNotEmpty)
+          Navigator.pop(context, _editContact);
+        else
+          FocusScope.of(context).requestFocus(_focusName);
+      }
     );
   }
 }
