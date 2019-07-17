@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aula_flutter_agenda/utils/utils.contact.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +30,7 @@ class _ContactPageState extends State<ContactPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
+      body: _buildBody(),
       floatingActionButton: _buildBotton(),
     );
   }
@@ -37,6 +40,30 @@ class _ContactPageState extends State<ContactPage> {
       backgroundColor: Colors.red,
       title: Text(_editContact.name ?? "Novo Contato"),
       centerTitle: true
+    );
+  }
+  Widget _buildBody(){
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            child: Container(
+              width: 140.0,
+              height: 140.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[300],
+                image: DecorationImage(
+                  image: _editContact.img != null
+                    ? FileImage(File(_editContact.img))
+                    : AssetImage("images/customer-512.png")
+                )
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
   Widget _buildBotton(){
