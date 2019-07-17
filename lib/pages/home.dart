@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:aula_flutter_agenda/utils/utils.contact.dart';
 import 'package:flutter/material.dart';
+import 'contact.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -29,10 +29,11 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: _buildBodyApp(),
-      floatingActionButton: _buildButtomAdd(),
+      floatingActionButton: _buildButtonAdd(),
     );
   }
 
+// Builder AppBar.
   Widget _buildAppBar(){
     return AppBar(
       title: Text("Contatos"),
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
       centerTitle: true
     );
   }
-  
+//Builder body and other structures.
   Widget _buildBodyApp(){
     return ListView.builder(
       padding: EdgeInsets.all(10.0),
@@ -50,17 +51,22 @@ class _HomeState extends State<Home> {
       },
     );
   }
-  
-  Widget _buildButtomAdd(){
+//Builder buttom float to add contact.
+  Widget _buildButtonAdd(){
     return FloatingActionButton(
       child: Icon(Icons.add),
       backgroundColor: Colors.red,
-      onPressed: (){},
+      onPressed: (){
+        _showContactPage();
+      },
     );
   }
-
+//Builder data cards
   Widget _contactCard(BuildContext context, int index){
     return GestureDetector(
+      onTap: (){
+        _showContactPage(contact: contacts[index]);
+      },
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),
@@ -97,6 +103,12 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showContactPage({Contact contact}){
+    Navigator.push(context,
+      MaterialPageRoute(builder: (context) => ContactPage(contact: contact,))
     );
   }
 }
