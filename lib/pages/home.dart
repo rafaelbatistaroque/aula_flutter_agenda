@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:aula_flutter_agenda/utils/utils.contact.dart';
 import 'package:flutter/material.dart';
 import 'contact.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -109,46 +110,55 @@ class _HomeState extends State<Home> {
           onClosing: (){},
           builder: (context){
             return Container(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              padding: EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: FlatButton(
-                      onPressed: (){},
-                      child: Text("Ligar",
-                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: FlatButton(
-                      child: Text("Editar",
-                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
-                      ),
-                      onPressed: (){
-                        Navigator.pop(context);
-                        _showContactPage(contact: contacts[index]);
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: FlatButton(
-                      child: Text("Excluir",
-                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
-                      ),
-                      onPressed: (){
-                        helper.deleteContact(contacts[index].id);
-                        setState(() {
-                          contacts.removeAt(index);
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.phone, color: Colors.green),
+                        iconSize: 35.0,
+                        onPressed: (){
+                          launch("tel:${contacts[index].phone}");
                           Navigator.pop(context);
-                        });
-                      },
-                    ),
-                  )
+                        },
+                      ),
+                      Text("Ligar", style: TextStyle(fontSize: 12.0),)
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.black54),
+                        iconSize: 35.0,
+                        onPressed: (){
+                          Navigator.pop(context);
+                          _showContactPage(contact: contacts[index]);
+                        }
+                      ),
+                      Text("Editar", style: TextStyle(fontSize: 12.0),)
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.black54),
+                        iconSize: 35.0,
+                        onPressed: (){
+                          helper.deleteContact(contacts[index].id);
+                            setState(() {
+                              contacts.removeAt(index);
+                              Navigator.pop(context);
+                            });
+                        },
+                      ),
+                      Text("Excluir", style: TextStyle(fontSize: 12.0),)
+                    ],
+                  ),
                 ],
               ),
             );
