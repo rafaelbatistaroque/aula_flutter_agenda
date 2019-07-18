@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:aula_flutter_agenda/utils/utils.contact.dart';
 import 'package:flutter/material.dart';
 
@@ -39,10 +38,13 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      floatingActionButton: _buildButtonSave(),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: _buildBody(),
+        floatingActionButton: _buildButtonSave(),
+      ),
+      onWillPop: _requestPop,
     );
   }
 
@@ -118,5 +120,35 @@ class _ContactPageState extends State<ContactPage> {
           FocusScope.of(context).requestFocus(_focusName);
       }
     );
+  }
+
+  Future<bool> _requestPop(){
+    if(_userEdited){
+      showDialog(context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text("Descartar alterações?"),
+            content: Text("Se sair, as alterações serão perdindas."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Cancelar"),
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text("Sim"),
+                onPressed: (){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        }
+      );
+      return Future.value(false);
+    }else
+    return Future.value(true);
   }
 }
