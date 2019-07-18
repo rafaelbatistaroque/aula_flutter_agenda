@@ -75,6 +75,7 @@ class _HomeState extends State<Home> {
                   shape: BoxShape.circle,
                   color: Colors.grey[300],
                   image: DecorationImage(
+                    fit: BoxFit.cover,
                     image: contacts[index].img != null
                       ? FileImage(File(contacts[index].img))
                       : AssetImage("images/customer-512.png")
