@@ -3,6 +3,7 @@ import 'package:aula_flutter_agenda/utils/utils.contact.dart';
 import 'package:flutter/material.dart';
 import 'contact.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:aula_flutter_agenda/utils/enum.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -34,7 +35,22 @@ class _HomeState extends State<Home> {
     return AppBar(
       title: Text("Contatos"),
       backgroundColor: Colors.red,
-      centerTitle: true
+      centerTitle: true,
+      actions: <Widget>[
+        PopupMenuButton<OrderOptions>(
+          itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+            const PopupMenuItem<OrderOptions>(
+              child: Text("Ordenar A-Z"),
+              value: OrderOptions.orderAZ,
+            ),
+            const PopupMenuItem<OrderOptions>(
+              child: Text("Ordenar Z-A"),
+              value: OrderOptions.orderZA,
+            )
+          ],
+          onSelected: _orderList
+        )
+      ],
     );
   }
 //Builder body and other structures.
@@ -190,5 +206,21 @@ class _HomeState extends State<Home> {
         contacts = list;
       });
     });
+  }
+
+  void _orderList(OrderOptions result){
+    switch (result) {
+      case OrderOptions.orderAZ:
+        contacts.sort((a, b){
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderZA:
+        contacts.sort((a, b){
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
+        break;
+    }
+    setState((){});
   }
 }

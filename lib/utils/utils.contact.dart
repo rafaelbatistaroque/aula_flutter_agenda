@@ -84,6 +84,7 @@ class ContactHelper{
     }
     return listContact;
   }
+
   Future close() async {
     Database dbContact = await db;
     dbContact.close();
