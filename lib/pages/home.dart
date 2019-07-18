@@ -15,12 +15,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
-    helper.getAllContacts().then((list){
-      setState(() {
-       contacts = list;
-      });
-    });
+    _getAllContacts();
   }
 
   @override
@@ -65,7 +60,7 @@ class _HomeState extends State<Home> {
   Widget _contactCard(BuildContext context, int index){
     return GestureDetector(
       onTap: (){
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
       child: Card(
         child: Padding(
@@ -94,11 +89,11 @@ class _HomeState extends State<Home> {
                       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                     Text(contacts[index].email ?? "",
                       style: TextStyle(fontSize: 16.0)),
-                    Text(contacts[index].email ?? "",
+                    Text(contacts[index].phone ?? "",
                       style: TextStyle(fontSize: 16.0))
                   ],
                 )
-              )
+              ),
             ],
           ),
         ),
@@ -106,9 +101,83 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _showContactPage({Contact contact}){
-    Navigator.push(context,
+  void _showOptions(BuildContext context, int index){
+    showModalBottomSheet(
+      context: context,
+      builder: (context){
+        return BottomSheet(
+          onClosing: (){},
+          builder: (context){
+            return Container(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: (){},
+                      child: Text("Ligar",
+                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      child: Text("Editar",
+                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
+                      ),
+                      onPressed: (){
+                        Navigator.pop(context);
+                        _showContactPage(contact: contacts[index]);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      child: Text("Excluir",
+                        style: TextStyle(color: Colors.black54, fontSize: 20.0),
+                      ),
+                      onPressed: (){
+                        helper.deleteContact(contacts[index].id);
+                        setState(() {
+                          contacts.removeAt(index);
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      }
+    );
+  }
+
+  void _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(context,
       MaterialPageRoute(builder: (context) => ContactPage(contact: contact,))
     );
+    if(recContact!= null){
+      
+      if(contact != null)
+        await helper.updateContact(recContact);
+      else
+        await helper.saveContact(recContact);
+      
+      _getAllContacts();
+    }
+  }
+
+  void _getAllContacts(){
+    helper.getAllContacts().then((list){
+      setState(() {
+        contacts = list;
+      });
+    });
   }
 }
