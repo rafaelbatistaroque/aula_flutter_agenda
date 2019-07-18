@@ -36,7 +36,7 @@ class _ContactPageState extends State<ContactPage> {
       _emailCrtl.text = _editContact.email;
       _phoneCrtl.text = _editContact.phone;
   }
-
+//Page to edit and new contacts
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -48,7 +48,7 @@ class _ContactPageState extends State<ContactPage> {
       onWillPop: _requestPop,
     );
   }
-
+//Builder AppBar
   Widget _buildAppBar(){
     return AppBar(
       backgroundColor: Colors.red,
@@ -56,7 +56,7 @@ class _ContactPageState extends State<ContactPage> {
       centerTitle: true
     );
   }
-
+//Builer Body page
   Widget _buildBody(){
     return SingleChildScrollView(
       padding: EdgeInsets.all(10.0),
@@ -68,7 +68,6 @@ class _ContactPageState extends State<ContactPage> {
               height: 140.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.grey[300],
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: _editContact.img != null

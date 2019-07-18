@@ -80,6 +80,7 @@ class _HomeState extends State<Home> {
         _showOptions(context, index);
       },
       child: Card(
+        elevation: 8,
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Row(
